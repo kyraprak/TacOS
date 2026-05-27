@@ -39,6 +39,7 @@ public class UserInterface {
     private final OrderService orderService;
 
     public UserInterface() {
+
         scanner = new Scanner(System.in);
         pricingService = new PricingService();
         receiptService = new ReceiptService();
@@ -79,6 +80,7 @@ public class UserInterface {
     private void newOrder() {
 
         Order order = new Order();
+
         boolean ordering = true;
 
         while (ordering) {
@@ -103,7 +105,7 @@ public class UserInterface {
 
                 case "2" -> addSignatureTaco(order);
 
-                case "3" -> addCombo(order);
+                case "3" -> buildCombo(order);
 
                 case "4" -> addDrink(order);
 
@@ -125,6 +127,7 @@ public class UserInterface {
                 }
 
                 case "0" -> {
+
                     warning("Order canceled.");
                     ordering = false;
                 }
@@ -133,6 +136,7 @@ public class UserInterface {
             }
         }
     }
+
     // walks the customer through step-by-step taco customization
     private Taco buildCustomTaco() {
 
@@ -148,6 +152,7 @@ public class UserInterface {
 
         return taco;
     }
+
     // allows customer to select taco pricing tier and size
     private void selectTacoSize(Taco taco) {
 
@@ -162,10 +167,13 @@ public class UserInterface {
         switch (scanner.nextLine()) {
 
             case "1" -> taco.setSize(TacoSize.SINGLE);
+
             case "2" -> taco.setSize(TacoSize.THREE_TACO);
+
             case "3" -> taco.setSize(TacoSize.BURRITO);
 
             default -> {
+
                 warning("Invalid option. Defaulting to SINGLE.");
                 taco.setSize(TacoSize.SINGLE);
             }
@@ -175,22 +183,26 @@ public class UserInterface {
     private void selectShell(Taco taco) {
 
         line("""
-        
-        Select Shell Type:
-        1) Corn
-        2) Flour
-        3) Hard Shell
-        4) Bowl
-        """);
+                
+                Select Shell Type:
+                1) Corn
+                2) Flour
+                3) Hard Shell
+                4) Bowl
+                """);
 
         switch (scanner.nextLine()) {
 
             case "1" -> taco.setShell(ShellType.CORN);
+
             case "2" -> taco.setShell(ShellType.FLOUR);
+
             case "3" -> taco.setShell(ShellType.HARD_SHELL);
+
             case "4" -> taco.setShell(ShellType.BOWL);
 
             default -> {
+
                 warning("Invalid option. Defaulting to FLOUR.");
                 taco.setShell(ShellType.FLOUR);
             }
@@ -200,6 +212,7 @@ public class UserInterface {
     private void addMeat(Taco taco) {
 
         line("""
+                
                 Select Meat:
                 - Carne Asada
                 - Al Pastor
@@ -215,6 +228,7 @@ public class UserInterface {
     private void addCheese(Taco taco) {
 
         line("""
+                
                 Select Cheese:
                 - Queso
                 - Cotija
@@ -226,6 +240,7 @@ public class UserInterface {
         line("Extra cheese? (yes/no)");
         taco.setExtraCheese(scanner.nextLine().equalsIgnoreCase("yes"));
     }
+
     // supports unlimited user-entered toppings until DONE is entered
     private void addRegularToppings(Taco taco) {
 
@@ -239,7 +254,9 @@ public class UserInterface {
 
             String topping = scanner.nextLine();
 
-            if (topping.equalsIgnoreCase("done")) break;
+            if (topping.equalsIgnoreCase("done")) {
+                break;
+            }
 
             taco.getToppings().add(topping);
         }
@@ -257,7 +274,9 @@ public class UserInterface {
 
             String sauce = scanner.nextLine();
 
-            if (sauce.equalsIgnoreCase("done")) break;
+            if (sauce.equalsIgnoreCase("done")) {
+                break;
+            }
 
             taco.getSauces().add(sauce);
         }
@@ -282,11 +301,13 @@ public class UserInterface {
         switch (scanner.nextLine()) {
 
             case "1" -> {
+
                 order.getTacos().add(new StreetTaco());
                 success("Street Taco added!");
             }
 
             case "2" -> {
+
                 order.getTacos().add(new SuperBurrito());
                 success("Super Burrito added!");
             }
@@ -295,29 +316,55 @@ public class UserInterface {
         }
     }
 
-    private void addCombo(Order order) {
+    // combo builder
+    private void buildCombo(Order order) {
+
+        title("""
+                
+                ===== BUILD YOUR COMBO =====
+                """);
+
+        ComboOrder combo = new ComboOrder();
+
+        line("Create your taco for the combo:");
+        combo.getTacos().add(buildCustomTaco());
 
         line("""
                 
-                ===== COMBO MENU =====
-                1) Street Taco Combo
-                2) Taco Snack Combo
+                Select Drink Size:
+                1) Small
+                2) Medium
+                3) Large
                 """);
 
-        switch (scanner.nextLine()) {
+        String size = switch (scanner.nextLine()) {
 
-            case "1" -> {
-                order.getCombos().add(new StreetTacoCombo());
-                success("Street Taco Combo added!");
-            }
+            case "2" -> "Medium";
 
-            case "2" -> {
-                order.getCombos().add(new TacoSnackCombo());
-                success("Taco Snack Combo added!");
-            }
+            case "3" -> "Large";
 
-            default -> error("Invalid option.");
+            default -> "Small";
+        };
+
+        line("Enter flavor:");
+        String flavor = scanner.nextLine();
+
+        combo.getDrinks().add(new Drink(size, flavor));
+
+        line("Add chips to combo? (yes/no)");
+
+        if (scanner.nextLine().equalsIgnoreCase("yes")) {
+
+            line("Enter salsa type:");
+
+            combo.getChips().add(
+                    new ChipsAndGuac(scanner.nextLine())
+            );
         }
+
+        order.getCombos().add(combo);
+
+        success("Combo created!");
     }
 
     private void addDrink(Order order) {
@@ -331,15 +378,21 @@ public class UserInterface {
                 """);
 
         String size = switch (scanner.nextLine()) {
+
             case "2" -> "Medium";
+
             case "3" -> "Large";
+
             default -> "Small";
         };
 
         line("Enter flavor:");
+
         String flavor = scanner.nextLine();
 
-        order.getDrinks().add(new Drink(size, flavor));
+        order.getDrinks().add(
+                new Drink(size, flavor)
+        );
 
         success("Drink added!");
     }
@@ -347,23 +400,32 @@ public class UserInterface {
     private void addChips(Order order) {
 
         line("Select salsa:");
+
         String salsa = scanner.nextLine();
 
-        order.getChips().add(new ChipsAndGuac(salsa));
+        order.getChips().add(
+                new ChipsAndGuac(salsa)
+        );
 
         success("Chips & Salsa added!");
     }
+
     // displays final order summary and handles order confirmation
     private void checkout(Order order) {
 
-        title("\n===== ORDER SUMMARY =====\n");
+        title("""
+                
+                ===== ORDER SUMMARY =====
+                """);
 
         orderService.displayOrder(order);
 
         double total = pricingService.calculateOrderTotal(order);
 
         divider();
+
         System.out.printf("TOTAL: $%.2f%n", total);
+
         divider();
 
         line("""
@@ -375,9 +437,11 @@ public class UserInterface {
         if (scanner.nextLine().equals("1")) {
 
             receiptService.saveReceipt(order, total);
+
             success("Receipt saved!");
 
         } else {
+
             error("Order canceled.");
         }
     }
