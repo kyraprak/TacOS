@@ -1,3 +1,4 @@
+// preconfigured specialty burrito demonstrating reusable taco inheritance
 package com.tacos.models;
 
 import com.tacos.enums.ShellType;

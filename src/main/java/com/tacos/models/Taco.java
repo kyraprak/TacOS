@@ -1,3 +1,4 @@
+// base taco model used for fully customizable tacos and inherited signature tacos
 package com.tacos.models;
 
 import com.tacos.enums.ShellType;
@@ -86,41 +87,61 @@ public class Taco implements Pricable, Receiptable {
         this.covered = covered;
     }
 
+    // pricing changes dynamically based on taco size,
+    // premium toppings, and extra topping selections
     @Override
     public double calculatePrice() {
 
-        double basePrice = switch (size) {
+        double total = switch (size) {
 
             case SINGLE -> 3.50;
             case THREE_TACO -> 9.00;
             case BURRITO -> 8.50;
         };
 
-        double meatPrice = switch (size) {
+        if (!meats.isEmpty()) {
 
-            case SINGLE -> 1.00;
-            case THREE_TACO -> 2.00;
-            case BURRITO -> 3.00;
-        };
+            total += switch (size) {
 
-        double cheesePrice = switch (size) {
+                case SINGLE -> 1.00;
+                case THREE_TACO -> 2.00;
+                case BURRITO -> 3.00;
+            };
+        }
 
-            case SINGLE -> .75;
-            case THREE_TACO -> 1.50;
-            case BURRITO -> 2.25;
-        };
+        if (!cheeses.isEmpty()) {
+
+            total += switch (size) {
+
+                case SINGLE -> 0.75;
+                case THREE_TACO -> 1.50;
+                case BURRITO -> 2.25;
+            };
+        }
 
         if (extraMeat) {
-            basePrice += meatPrice / 2;
+
+            total += switch (size) {
+
+                case SINGLE -> 0.50;
+                case THREE_TACO -> 1.00;
+                case BURRITO -> 1.50;
+            };
         }
 
         if (extraCheese) {
-            basePrice += cheesePrice / 2;
+
+            total += switch (size) {
+
+                case SINGLE -> 0.30;
+                case THREE_TACO -> 0.60;
+                case BURRITO -> 0.90;
+            };
         }
 
-        return basePrice + meatPrice + cheesePrice;
+        return total;
     }
-
+    // generates formatted receipt output for checkout and file saving
     @Override
     public String getReceiptText() {
 
@@ -132,6 +153,8 @@ public class Taco implements Pricable, Receiptable {
                 Cheeses: %s
                 Toppings: %s
                 Sauces: %s
+                Extra Meat: %s
+                Extra Cheese: %s
                 Covered: %s
                 Price: $%.2f
                 """.formatted(
@@ -141,6 +164,8 @@ public class Taco implements Pricable, Receiptable {
                 cheeses,
                 toppings,
                 sauces,
+                extraMeat ? "Yes" : "No",
+                extraCheese ? "Yes" : "No",
                 covered ? "Yes" : "No",
                 calculatePrice()
         );

@@ -1,3 +1,23 @@
+// main console-driven user interface for TacoVerse ordering flow
+/* TacoVerse POS System
+ * Console-based point of sale application for managing taco shop orders.
+ *
+ * Features:
+ * - Custom taco creation
+ * - Signature tacos
+ * - Combo meals
+ * - Dynamic pricing
+ * - Receipt generation
+ * - File persistence
+ *
+ * Demonstrates:
+ * - OOP principles
+ * - Inheritance
+ * - Interfaces
+ * - Enums
+ * - Layered architecture
+ * - Service-based design
+ */
 package com.tacos.ui;
 
 import com.tacos.enums.ShellType;
@@ -25,7 +45,7 @@ public class UserInterface {
         orderService = new OrderService();
     }
 
-    // main menu
+    // home screen loop that keeps the application running until exit
     public void display() {
 
         boolean running = true;
@@ -55,7 +75,7 @@ public class UserInterface {
         }
     }
 
-    // order flow
+    // handles the full customer ordering workflow
     private void newOrder() {
 
         Order order = new Order();
@@ -113,7 +133,7 @@ public class UserInterface {
             }
         }
     }
-
+    // walks the customer through step-by-step taco customization
     private Taco buildCustomTaco() {
 
         Taco taco = new Taco();
@@ -128,7 +148,7 @@ public class UserInterface {
 
         return taco;
     }
-
+    // allows customer to select taco pricing tier and size
     private void selectTacoSize(Taco taco) {
 
         line("""
@@ -155,18 +175,20 @@ public class UserInterface {
     private void selectShell(Taco taco) {
 
         line("""
-                
-                Select Shell Type:
-                1) Corn
-                2) Flour
-                3) Hard Shell
-                """);
+        
+        Select Shell Type:
+        1) Corn
+        2) Flour
+        3) Hard Shell
+        4) Bowl
+        """);
 
         switch (scanner.nextLine()) {
 
             case "1" -> taco.setShell(ShellType.CORN);
             case "2" -> taco.setShell(ShellType.FLOUR);
             case "3" -> taco.setShell(ShellType.HARD_SHELL);
+            case "4" -> taco.setShell(ShellType.BOWL);
 
             default -> {
                 warning("Invalid option. Defaulting to FLOUR.");
@@ -204,7 +226,7 @@ public class UserInterface {
         line("Extra cheese? (yes/no)");
         taco.setExtraCheese(scanner.nextLine().equalsIgnoreCase("yes"));
     }
-
+    // supports unlimited user-entered toppings until DONE is entered
     private void addRegularToppings(Taco taco) {
 
         while (true) {
@@ -247,7 +269,7 @@ public class UserInterface {
         taco.setCovered(scanner.nextLine().equalsIgnoreCase("yes"));
     }
 
-    // ================= SIGNATURE ITEMS =================
+    // signature items
     private void addSignatureTaco(Order order) {
 
         line("""
@@ -331,7 +353,7 @@ public class UserInterface {
 
         success("Chips & Salsa added!");
     }
-
+    // displays final order summary and handles order confirmation
     private void checkout(Order order) {
 
         title("\n===== ORDER SUMMARY =====\n");

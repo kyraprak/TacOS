@@ -1,3 +1,4 @@
+// lightweight combo meal containing a taco and chips & salsa
 package com.tacos.models;
 
 public class TacoSnackCombo extends ComboOrder {

@@ -1,3 +1,4 @@
+// JVM application entry point
 package com.tacos;
 
 import com.tacos.app.App;

@@ -1,3 +1,4 @@
+// prebuilt combo meal containing signature tacos and a drink
 package com.tacos.models;
 
 public class StreetTacoCombo extends ComboOrder {

@@ -1,3 +1,4 @@
+// entry point for launching the TacoVerse application flow
 package com.tacos.app;
 
 import com.tacos.data.ReceiptFileManager;

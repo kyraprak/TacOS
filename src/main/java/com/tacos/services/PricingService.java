@@ -1,29 +1,18 @@
+// service layer responsible for order pricing operations
 package com.tacos.services;
 
-import com.tacos.models.*;
+import com.tacos.models.Order;
 
 public class PricingService {
 
     public double calculateOrderTotal(Order order) {
 
-        double total = 0;
-
-        for (Taco taco : order.getTacos()) {
-            total += taco.calculatePrice();
-        }
-
-        for (Drink drink : order.getDrinks()) {
-            total += drink.calculatePrice();
-        }
-
-        for (ChipsAndGuac chips : order.getChips()) {
-            total += chips.calculatePrice();
-        }
-
-        for (ComboOrder combo : order.getCombos()) {
-            total += combo.calculatePrice();
-        }
-
-        return total;
+        return order.calculateTotal();
     }
 }
+
+//order class knows how to total itself
+//PricingService becomes a thin service layer
+//duplicated loops removed
+//easier to maintain later
+//pricing logic now lives inside Order class

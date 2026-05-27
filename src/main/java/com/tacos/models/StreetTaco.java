@@ -1,3 +1,4 @@
+// signature taco preset using inheritance from the Taco base class
 package com.tacos.models;
 
 import com.tacos.enums.ShellType;

@@ -1,3 +1,4 @@
+// base combo meal model that groups tacos, drinks, and sides together
 package com.tacos.models;
 
 import com.tacos.interfaces.Pricable;
@@ -32,7 +33,7 @@ public class ComboOrder implements Pricable, Receiptable {
     public List<ChipsAndGuac> getChips() {
         return chips;
     }
-
+    // calculates total combo cost by summing all included items
     @Override
     public double calculatePrice() {
 

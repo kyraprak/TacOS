@@ -1,3 +1,4 @@
+// utility class for reusable styled console output methods
 package com.tacos.ui;
 
 import static com.tacos.ui.ConsoleColors.*;
