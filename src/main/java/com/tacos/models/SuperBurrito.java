@@ -17,6 +17,8 @@ public class SuperBurrito extends Taco {
         toppings.add("Pico de Gallo");
         toppings.add("Lettuce");
         toppings.add("Tomatoes");
+        toppings.add("Cilantro");
+        toppings.add("Onion");
 
         covered = true;
     }

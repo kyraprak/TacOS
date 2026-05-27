@@ -46,7 +46,7 @@ public class UserInterface {
 
                 case "0" -> {
                     running = false;
-                    System.out.println("Thank you for visiting TacoVerse!");
+                    System.out.println("Thank you for supporting TacoVerse!");
                 }
 
                 default -> System.out.println("Invalid option.");
@@ -63,15 +63,16 @@ public class UserInterface {
         while (ordering) {
 
             System.out.println("""
-                    
-                    ===== ORDER MENU =====
-                    1) Add Taco
-                    2) Add Signature Taco
-                    3) Add Drink
-                    4) Add Chips & Salsa
-                    5) Checkout
-                    0) Cancel Order
-                    """);
+                
+                ===== ORDER MENU =====
+                1) Add Taco
+                2) Add Signature Taco
+                3) Add Combo
+                4) Add Drink
+                5) Add Chips & Salsa
+                6) Checkout
+                0) Cancel Order
+                """);
 
             String choice = scanner.nextLine();
 
@@ -81,15 +82,18 @@ public class UserInterface {
 
                 case "2" -> addSignatureTaco(order);
 
-                case "3" -> addDrink(order);
+                case "3" -> addCombo(order);
 
-                case "4" -> addChips(order);
+                case "4" -> addDrink(order);
 
-                case "5" -> {
+                case "5" -> addChips(order);
+
+                case "6" -> {
 
                     if (order.getTacos().isEmpty()
                             && order.getDrinks().isEmpty()
-                            && order.getChips().isEmpty()) {
+                            && order.getChips().isEmpty()
+                            && order.getCombos().isEmpty()) {
 
                         System.out.println("Order cannot be empty.");
                         break;
@@ -165,10 +169,9 @@ public class UserInterface {
         System.out.println("""
                 
                 Select Shell Type:
-                1) Corn
+                1) Hard Shell
                 2) Flour
-                3) Hard Shell
-                4) Bowl
+                3) Corn
                 """);
 
         String choice = scanner.nextLine();
@@ -181,10 +184,8 @@ public class UserInterface {
 
             case "3" -> taco.setShell(ShellType.HARD_SHELL);
 
-            case "4" -> taco.setShell(ShellType.BOWL);
-
             default -> {
-                System.out.println("Invalid option. Defaulting to FLOUR.");
+                System.out.println("Invalid option. Defaulting to FLOUR tortilla.");
                 taco.setShell(ShellType.FLOUR);
             }
         }
@@ -197,10 +198,7 @@ public class UserInterface {
                 Select Meat:
                 - Carne Asada
                 - Al Pastor
-                - Carnitas
                 - Pollo
-                - Chorizo
-                - Pescado
                 """);
 
         String meat = scanner.nextLine();
@@ -217,8 +215,7 @@ public class UserInterface {
         System.out.println("""
                 
                 Select Cheese:
-                - Queso Fresco
-                - Oaxaca
+                - Queso
                 - Cotija
                 - Cheddar
                 """);
@@ -241,7 +238,6 @@ public class UserInterface {
             System.out.println("""
                     
                     Add Topping:
-                    - Lettuce
                     - Cilantro
                     - Onions
                     - Tomatoes
@@ -250,6 +246,12 @@ public class UserInterface {
                     - Pico de Gallo
                     - Guacamole
                     - Corn
+                    - Lettuce
+                    - Pickled Onion
+                    - Lime
+                    - Slaw
+                    - Sour Cream
+                    - Cheese
                     
                     Type DONE when finished.
                     """);
@@ -282,6 +284,8 @@ public class UserInterface {
                     - Habanero
                     - Mild
                     - Extra Hot
+                    - Lime Guacamole
+                    - Regular Guacamole
                     
                     Type DONE when finished.
                     """);
@@ -346,6 +350,46 @@ public class UserInterface {
         }
     }
 
+    private void addCombo(Order order) {
+
+        System.out.println("""
+            
+            ===== COMBO MENU =====
+            1) Street Taco Combo
+               - 3 Street Tacos
+               - Medium Drink
+            
+            2) Taco Snack Combo
+               - 1 Taco
+               - Chips & Salsa
+            """);
+
+        String choice = scanner.nextLine();
+
+        switch (choice) {
+
+            case "1" -> {
+
+                ComboOrder combo = new StreetTacoCombo();
+
+                order.getCombos().add(combo);
+
+                System.out.println("Street Taco Combo added!");
+            }
+
+            case "2" -> {
+
+                ComboOrder combo = new TacoSnackCombo();
+
+                order.getCombos().add(combo);
+
+                System.out.println("Taco Snack Combo added!");
+            }
+
+            default -> System.out.println("Invalid option.");
+        }
+    }
+
     private void addDrink(Order order) {
 
         System.out.println("""
@@ -389,6 +433,8 @@ public class UserInterface {
                 - Salsa Roja
                 - Mild
                 - Extra Hot
+                - Lime Guacamole
+                - Regular Guacamole
                 """);
 
         String salsa = scanner.nextLine();

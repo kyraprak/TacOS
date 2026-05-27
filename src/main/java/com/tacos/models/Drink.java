@@ -19,8 +19,8 @@ public class Drink implements Pricable, Receiptable {
         return switch (size.toLowerCase()) {
 
             case "small" -> 2.00;
-            case "medium" -> 2.50;
-            case "large" -> 3.00;
+            case "medium" -> 5.50;
+            case "large" -> 8.00;
             default -> 0;
         };
     }

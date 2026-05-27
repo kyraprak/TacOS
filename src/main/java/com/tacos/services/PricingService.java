@@ -20,6 +20,10 @@ public class PricingService {
             total += chips.calculatePrice();
         }
 
+        for (ComboOrder combo : order.getCombos()) {
+            total += combo.calculatePrice();
+        }
+
         return total;
     }
 }
