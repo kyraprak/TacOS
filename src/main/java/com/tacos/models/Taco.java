@@ -1,42 +1,48 @@
 package com.tacos.models;
 
+import com.tacos.enums.ShellType;
+import com.tacos.enums.TacoSize;
+import com.tacos.interfaces.Pricable;
+import com.tacos.interfaces.Receiptable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Taco {
+public class Taco implements Pricable, Receiptable {
 
-    private String size;
-    private String shell;
+    protected TacoSize size;
+    protected ShellType shell;
 
-    private List<String> meats;
-    private List<String> cheeses;
-    private List<String> toppings;
-    private List<String> sauces;
+    protected List<String> meats;
+    protected List<String> cheeses;
+    protected List<String> toppings;
+    protected List<String> sauces;
 
-    private boolean extraMeat;
-    private boolean extraCheese;
-    private boolean covered;
+    protected boolean extraMeat;
+    protected boolean extraCheese;
+    protected boolean covered;
 
     public Taco() {
+
         meats = new ArrayList<>();
         cheeses = new ArrayList<>();
         toppings = new ArrayList<>();
         sauces = new ArrayList<>();
     }
 
-    public String getSize() {
+    public TacoSize getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(TacoSize size) {
         this.size = size;
     }
 
-    public String getShell() {
+    public ShellType getShell() {
         return shell;
     }
 
-    public void setShell(String shell) {
+    public void setShell(ShellType shell) {
         this.shell = shell;
     }
 
@@ -81,7 +87,43 @@ public class Taco {
     }
 
     @Override
-    public String toString() {
+    public double calculatePrice() {
+
+        double basePrice = switch (size) {
+
+            case SINGLE -> 3.50;
+            case THREE_TACO -> 9.00;
+            case BURRITO -> 8.50;
+        };
+
+        double meatPrice = switch (size) {
+
+            case SINGLE -> 1.00;
+            case THREE_TACO -> 2.00;
+            case BURRITO -> 3.00;
+        };
+
+        double cheesePrice = switch (size) {
+
+            case SINGLE -> .75;
+            case THREE_TACO -> 1.50;
+            case BURRITO -> 2.25;
+        };
+
+        if (extraMeat) {
+            basePrice += meatPrice / 2;
+        }
+
+        if (extraCheese) {
+            basePrice += cheesePrice / 2;
+        }
+
+        return basePrice + meatPrice + cheesePrice;
+    }
+
+    @Override
+    public String getReceiptText() {
+
         return """
                 Taco:
                 Size: %s
@@ -90,9 +132,8 @@ public class Taco {
                 Cheeses: %s
                 Toppings: %s
                 Sauces: %s
-                Extra Meat: %s
-                Extra Cheese: %s
                 Covered: %s
+                Price: $%.2f
                 """.formatted(
                 size,
                 shell,
@@ -100,9 +141,13 @@ public class Taco {
                 cheeses,
                 toppings,
                 sauces,
-                extraMeat ? "Yes" : "No",
-                extraCheese ? "Yes" : "No",
-                covered ? "Yes" : "No"
+                covered ? "Yes" : "No",
+                calculatePrice()
         );
+    }
+
+    @Override
+    public String toString() {
+        return getReceiptText();
     }
 }
