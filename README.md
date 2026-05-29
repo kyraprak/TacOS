@@ -326,6 +326,10 @@ FINAL TOTAL: $7.75
 ```
 
 ---
+# Code Application Example
+<img width="630" height="1412" alt="code" src="https://github.com/user-attachments/assets/792de3b7-2c0b-4333-96b1-154322c98440" />
+
+---
 
 # 🚀 How To Run
 
@@ -397,7 +401,18 @@ This project goes beyond the minimum requirements by implementing:
 * strong OOP principles throughout the entire application
 
 ---
+Special Code Highlight
+Running Subtotal Display
 
+This feature demonstrates:
+
+* real-time calculation logic
+* object interaction between classes
+* separation of concerns
+* improved user experience design
+* <img width="790" height="490" alt="special code" src="https://github.com/user-attachments/assets/722ac2f7-5d2a-4a9f-b9c7-dba8d4c37218" />
+
+---
 # 👩🏽‍💻 Author
 
 ## TacoVerse POS System
