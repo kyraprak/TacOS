@@ -9,22 +9,29 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 // handles receipt file generation and persistence
+// saves completed order details into a timestamped receipt file
+// uses current date/time to ensure unique receipt filenames
 public class ReceiptService {
-    // saves completed order details into a timestamped receipt file
+
+    private static int orderCounter = 1000;
+
     public void saveReceipt(Order order, double total) {
-        // uses current date/time to ensure unique receipt filenames
+
+        int orderNumber = orderCounter++;
+
         String fileName = LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"))
+                .format(DateTimeFormatter.ofPattern("yyyyMMdd-hhmmss"))
                 + ".txt";
 
         try (FileWriter writer = new FileWriter("receipts/" + fileName)) {
 
             writer.write("""
-                    =============================
-                         TACOVERSE RECEIPT
-                    =============================
-                    
-                    """);
+                =============================
+                     TACOVERSE RECEIPT
+                =============================
+        """);
+
+            writer.write("ORDER #: " + orderNumber + "\n\n");
 
             for (Taco taco : order.getTacos()) {
 

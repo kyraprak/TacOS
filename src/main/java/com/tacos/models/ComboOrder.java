@@ -33,6 +33,15 @@ public class ComboOrder implements Pricable, Receiptable {
     public List<ChipsAndGuac> getChips() {
         return chips;
     }
+
+    public String getComboName() {
+        return comboName;
+    }
+
+    public void setComboName(String comboName) {
+        this.comboName = comboName;
+    }
+
     // calculates total combo cost by summing all included items
     @Override
     public double calculatePrice() {

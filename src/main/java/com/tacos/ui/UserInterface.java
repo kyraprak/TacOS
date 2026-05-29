@@ -101,15 +101,55 @@ public class UserInterface {
 
             switch (choice) {
 
-                case "1" -> order.getTacos().add(buildCustomTaco());
+                case "1" -> {
 
-                case "2" -> addSignatureTaco(order);
+                    order.getTacos().add(buildCustomTaco());
 
-                case "3" -> buildCombo(order);
+                    System.out.printf(
+                            "Current subtotal: $%.2f%n",
+                            order.calculateTotal()
+                    );
+                }
 
-                case "4" -> addDrink(order);
+                case "2" -> {
 
-                case "5" -> addChips(order);
+                    addSignatureTaco(order);
+
+                    System.out.printf(
+                            "Current subtotal: $%.2f%n",
+                            order.calculateTotal()
+                    );
+                }
+
+                case "3" -> {
+
+                    buildCombo(order);
+
+                    System.out.printf(
+                            "Current subtotal: $%.2f%n",
+                            order.calculateTotal()
+                    );
+                }
+
+                case "4" -> {
+
+                    addDrink(order);
+
+                    System.out.printf(
+                            "Current subtotal: $%.2f%n",
+                            order.calculateTotal()
+                    );
+                }
+
+                case "5" -> {
+
+                    addChips(order);
+
+                    System.out.printf(
+                            "Current subtotal: $%.2f%n",
+                            order.calculateTotal()
+                    );
+                }
 
                 case "6" -> {
 
@@ -212,17 +252,38 @@ public class UserInterface {
     private void addMeat(Taco taco) {
 
         line("""
-                
-                Select Meat:
-                - Carne Asada
-                - Al Pastor
-                - Pollo
-                """);
+            
+            Select Meat:
+            1) Carne Asada
+            2) Al Pastor
+            3) Carnitas
+            4) Pollo
+            5) Chorizo
+            6) Pescado
+            """);
 
-        taco.getMeats().add(scanner.nextLine());
+        String meat = switch (scanner.nextLine()) {
+
+            case "1" -> "Carne Asada";
+            case "2" -> "Al Pastor";
+            case "3" -> "Carnitas";
+            case "4" -> "Pollo";
+            case "5" -> "Chorizo";
+            case "6" -> "Pescado";
+
+            default -> {
+                warning("Invalid selection. Defaulting to Pollo.");
+                yield "Pollo";
+            }
+        };
+
+        taco.getMeats().add(meat);
 
         line("Extra meat? (yes/no)");
-        taco.setExtraMeat(scanner.nextLine().equalsIgnoreCase("yes"));
+
+        taco.setExtraMeat(
+                scanner.nextLine().equalsIgnoreCase("yes")
+        );
     }
 
     private void addCheese(Taco taco) {
@@ -244,21 +305,51 @@ public class UserInterface {
     // supports unlimited user-entered toppings until DONE is entered
     private void addRegularToppings(Taco taco) {
 
-        while (true) {
+        boolean addingToppings = true;
+
+        while (addingToppings) {
 
             line("""
-                    
-                    Add Topping:
-                    (type DONE when finished)
-                    """);
+                
+                Select Topping:
+                1) Lettuce
+                2) Cilantro
+                3) Onions
+                4) Tomatoes
+                5) Jalapeños
+                6) Radishes
+                7) Pico de Gallo
+                8) Guacamole
+                9) Corn
+                0) Finish
+                """);
 
-            String topping = scanner.nextLine();
+            String topping = switch (scanner.nextLine()) {
 
-            if (topping.equalsIgnoreCase("done")) {
-                break;
+                case "1" -> "Lettuce";
+                case "2" -> "Cilantro";
+                case "3" -> "Onions";
+                case "4" -> "Tomatoes";
+                case "5" -> "Jalapeños";
+                case "6" -> "Radishes";
+                case "7" -> "Pico de Gallo";
+                case "8" -> "Guacamole";
+                case "9" -> "Corn";
+
+                case "0" -> {
+                    addingToppings = false;
+                    yield null;
+                }
+
+                default -> {
+                    warning("Invalid option.");
+                    yield null;
+                }
+            };
+
+            if (topping != null) {
+                taco.getToppings().add(topping);
             }
-
-            taco.getToppings().add(topping);
         }
     }
 
@@ -325,6 +416,7 @@ public class UserInterface {
                 """);
 
         ComboOrder combo = new ComboOrder();
+        combo.setComboName("Custom Combo");
 
         line("Create your taco for the combo:");
         combo.getTacos().add(buildCustomTaco());

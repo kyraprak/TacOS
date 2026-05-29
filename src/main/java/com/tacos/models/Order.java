@@ -34,6 +34,7 @@ public class Order {
     public List<ComboOrder> getCombos() {
         return combos;
     }
+
     // centralized order pricing calculation used during checkout
     public double calculateTotal() {
 
@@ -56,5 +57,20 @@ public class Order {
         }
 
         return total;
+    }
+//    cleaner validation
+    public boolean hasTacos() {
+
+        if (!tacos.isEmpty()) {
+            return true;
+        }
+
+        for (ComboOrder combo : combos) {
+            if (!combo.getTacos().isEmpty()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
